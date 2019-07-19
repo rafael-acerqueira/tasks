@@ -94,6 +94,17 @@ const Schedule = () => {
 		}
 	])
 
+	const toggleTask = id => {
+		setTasks(
+			tasks.map(task => {
+				if (task.id === id) {
+					return { ...task, doneAt: task.doneAt ? null : new Date() }
+				}
+				return task
+			})
+		)
+	}
+
 	return (
 		<View style={styled.container}>
 			<ImageBackground source={todayImage} style={styled.background}>
@@ -110,7 +121,7 @@ const Schedule = () => {
 				<FlatList
 					data={tasks}
 					keyExtractor={item => `${item.id}`}
-					renderItem={({ item }) => <Task {...item} />}
+					renderItem={({ item }) => <Task {...item} toggleTask={toggleTask} />}
 				/>
 			</View>
 		</View>
