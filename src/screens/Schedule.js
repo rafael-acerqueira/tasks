@@ -1,10 +1,19 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, ImageBackground, FlatList } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+	View,
+	Text,
+	StyleSheet,
+	ImageBackground,
+	FlatList,
+	TouchableOpacity,
+	Platform
+} from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
 import global from '../../src/styles/global'
 import Task from '../components/Task'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 const Schedule = () => {
 	const [tasks, setTasks] = useState([
@@ -94,6 +103,30 @@ const Schedule = () => {
 		}
 	])
 
+	const [showDoneTasks, setShowDoneTasks] = useState(true)
+	const [visibleTasks, setVisibleTasks] = useState([])
+
+	const filterTasks = () => {
+		const visibleTasks = [...tasks]
+		setVisibleTasks(
+			visibleTasks.filter(task => {
+				if (showDoneTasks) {
+					return task
+				} else {
+					return task.doneAt === null
+				}
+			})
+		)
+	}
+
+	const toggleFilter = () => {
+		setShowDoneTasks(!showDoneTasks)
+	}
+
+	useEffect(() => {
+		filterTasks()
+	}, [showDoneTasks, tasks])
+
 	const toggleTask = id => {
 		setTasks(
 			tasks.map(task => {
@@ -108,6 +141,15 @@ const Schedule = () => {
 	return (
 		<View style={styled.container}>
 			<ImageBackground source={todayImage} style={styled.background}>
+				<View style={styled.iconBar}>
+					<TouchableOpacity onPress={toggleFilter}>
+						<Icon
+							name={showDoneTasks ? 'eye' : 'eye-slash'}
+							size={20}
+							color={global.colors.secondary}
+						/>
+					</TouchableOpacity>
+				</View>
 				<View style={styled.titleBar}>
 					<Text style={styled.title}>Hoje</Text>
 					<Text style={styled.subtitle}>
@@ -119,7 +161,7 @@ const Schedule = () => {
 			</ImageBackground>
 			<View style={styled.taskContainer}>
 				<FlatList
-					data={tasks}
+					data={visibleTasks}
 					keyExtractor={item => `${item.id}`}
 					renderItem={({ item }) => <Task {...item} toggleTask={toggleTask} />}
 				/>
@@ -155,6 +197,12 @@ const styled = StyleSheet.create({
 	},
 	taskContainer: {
 		flex: 7
+	},
+	iconBar: {
+		marginTop: Platform.OS === 'ios' ? 30 : 10,
+		marginHorizontal: 20,
+		flexDirection: 'row',
+		justifyContent: 'flex-end'
 	}
 })
 
