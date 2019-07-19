@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
 import global from '../../src/styles/global'
+import Task from '../components/Task'
 
 const Schedule = () => (
 	<View style={styled.container}>
@@ -18,9 +19,56 @@ const Schedule = () => (
 			</View>
 		</ImageBackground>
 		<View style={styled.taskContainer}>
-			<Text>Tarefa 1</Text>
-			<Text>Tarefa 2</Text>
-			<Text>Tarefa 3</Text>
+			<Task
+				description="Correr aos sábados"
+				estimateAt={new Date()}
+				doneAt={null}
+			/>
+			<Task
+				description="Estudar Inglês"
+				estimateAt={new Date()}
+				doneAt={new Date()}
+			/>
+			<Task
+				description="Correr aos sábados"
+				estimateAt={new Date()}
+				doneAt={null}
+			/>
+			<Task
+				description="Estudar Inglês"
+				estimateAt={new Date()}
+				doneAt={new Date()}
+			/>
+			<Task
+				description="Correr aos sábados"
+				estimateAt={new Date()}
+				doneAt={null}
+			/>
+			<Task
+				description="Estudar Inglês"
+				estimateAt={new Date()}
+				doneAt={new Date()}
+			/>
+			<Task
+				description="Correr aos sábados"
+				estimateAt={new Date()}
+				doneAt={null}
+			/>
+			<Task
+				description="Estudar Inglês"
+				estimateAt={new Date()}
+				doneAt={new Date()}
+			/>
+			<Task
+				description="Correr aos sábados"
+				estimateAt={new Date()}
+				doneAt={null}
+			/>
+			<Task
+				description="Estudar Inglês"
+				estimateAt={new Date()}
+				doneAt={new Date()}
+			/>
 		</View>
 	</View>
 )
