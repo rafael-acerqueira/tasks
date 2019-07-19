@@ -1,77 +1,121 @@
-import React from 'react'
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, ImageBackground, FlatList } from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
 import global from '../../src/styles/global'
 import Task from '../components/Task'
 
-const Schedule = () => (
-	<View style={styled.container}>
-		<ImageBackground source={todayImage} style={styled.background}>
-			<View style={styled.titleBar}>
-				<Text style={styled.title}>Hoje</Text>
-				<Text style={styled.subtitle}>
-					{moment()
-						.locale('pt-BR')
-						.format('ddd, D [de] MMMM')}
-				</Text>
+const Schedule = () => {
+	const [tasks, setTasks] = useState([
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Ver palestra sobre JS',
+			estimateAt: new Date(),
+			doneAt: null
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		},
+		{
+			id: Math.random(),
+			description: 'Comprar Curso',
+			estimateAt: new Date(),
+			doneAt: new Date()
+		}
+	])
+
+	return (
+		<View style={styled.container}>
+			<ImageBackground source={todayImage} style={styled.background}>
+				<View style={styled.titleBar}>
+					<Text style={styled.title}>Hoje</Text>
+					<Text style={styled.subtitle}>
+						{moment()
+							.locale('pt-BR')
+							.format('ddd, D [de] MMMM')}
+					</Text>
+				</View>
+			</ImageBackground>
+			<View style={styled.taskContainer}>
+				<FlatList
+					data={tasks}
+					keyExtractor={item => `${item.id}`}
+					renderItem={({ item }) => <Task {...item} />}
+				/>
 			</View>
-		</ImageBackground>
-		<View style={styled.taskContainer}>
-			<Task
-				description="Correr aos sábados"
-				estimateAt={new Date()}
-				doneAt={null}
-			/>
-			<Task
-				description="Estudar Inglês"
-				estimateAt={new Date()}
-				doneAt={new Date()}
-			/>
-			<Task
-				description="Correr aos sábados"
-				estimateAt={new Date()}
-				doneAt={null}
-			/>
-			<Task
-				description="Estudar Inglês"
-				estimateAt={new Date()}
-				doneAt={new Date()}
-			/>
-			<Task
-				description="Correr aos sábados"
-				estimateAt={new Date()}
-				doneAt={null}
-			/>
-			<Task
-				description="Estudar Inglês"
-				estimateAt={new Date()}
-				doneAt={new Date()}
-			/>
-			<Task
-				description="Correr aos sábados"
-				estimateAt={new Date()}
-				doneAt={null}
-			/>
-			<Task
-				description="Estudar Inglês"
-				estimateAt={new Date()}
-				doneAt={new Date()}
-			/>
-			<Task
-				description="Correr aos sábados"
-				estimateAt={new Date()}
-				doneAt={null}
-			/>
-			<Task
-				description="Estudar Inglês"
-				estimateAt={new Date()}
-				doneAt={new Date()}
-			/>
 		</View>
-	</View>
-)
+	)
+}
 
 const styled = StyleSheet.create({
 	container: {
