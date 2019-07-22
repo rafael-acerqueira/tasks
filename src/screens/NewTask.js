@@ -8,7 +8,8 @@ import {
 	DatePickerAndroid,
 	StyleSheet,
 	TouchableWithoutFeedback,
-	TouchableOpacity
+	TouchableOpacity,
+	Alert
 } from 'react-native'
 import moment from 'moment'
 import global from '../styles/global'
@@ -18,6 +19,10 @@ const NewTask = props => {
 	const [date, setDate] = useState(new Date())
 
 	const save = () => {
+		if (!description.trim()) {
+			Alert.alert('Dados inválidos', 'Informe uma descrição')
+			return
+		}
 		const data = { description, date }
 		props.onSave(data)
 		setDescription('')
