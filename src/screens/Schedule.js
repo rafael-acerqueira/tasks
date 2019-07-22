@@ -6,7 +6,8 @@ import {
 	ImageBackground,
 	FlatList,
 	TouchableOpacity,
-	Platform
+	Platform,
+	AsyncStorage
 } from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
@@ -18,92 +19,7 @@ import ActionButton from 'react-native-action-button'
 import NewTask from './NewTask'
 
 const Schedule = () => {
-	const [tasks, setTasks] = useState([
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Ver palestra sobre JS',
-			estimateAt: new Date(),
-			doneAt: null
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		},
-		{
-			id: Math.random(),
-			description: 'Comprar Curso',
-			estimateAt: new Date(),
-			doneAt: new Date()
-		}
-	])
+	const [tasks, setTasks] = useState([])
 
 	const [showDoneTasks, setShowDoneTasks] = useState(true)
 	const [visibleTasks, setVisibleTasks] = useState([])
@@ -138,11 +54,22 @@ const Schedule = () => {
 				}
 			})
 		)
+
+		AsyncStorage.setItem('tasks', JSON.stringify(tasks))
 	}
 
 	const toggleFilter = () => {
 		setShowDoneTasks(!showDoneTasks)
 	}
+
+	useEffect(() => {
+		const getTasks = async () => {
+			const data = await AsyncStorage.getItem('tasks')
+			const tasks = JSON.parse(data) || []
+			setTasks(tasks)
+		}
+		getTasks()
+	}, [])
 
 	useEffect(() => {
 		filterTasks()
