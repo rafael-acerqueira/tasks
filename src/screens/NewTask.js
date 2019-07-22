@@ -6,6 +6,7 @@ import {
 	TextInput,
 	DatePickerIOS,
 	DatePickerAndroid,
+	Platform,
 	StyleSheet,
 	TouchableWithoutFeedback,
 	TouchableOpacity,
@@ -29,6 +30,34 @@ const NewTask = props => {
 		setDate(new Date())
 	}
 
+	const handleDateAndroidChange = () => {
+		DatePickerAndroid.open({
+			date
+		}).then(event => {
+			if (event.action !== DatePickerAndroid.dismissedAction) {
+				const momentDate = moment(date)
+				momentDate.date(event.day)
+				momentDate.month(event.month)
+				momentDate.year(event.year)
+				setDate(momentDate.toDate())
+			}
+		})
+	}
+
+	let datePicker =
+		Platform.OS === 'ios' ? (
+			<DatePickerIOS
+				mode="date"
+				date={date}
+				onDateChange={date => setDate(date)}
+			/>
+		) : (
+			<TouchableOpacity onPress={handleDateAndroidChange}>
+				<Text style={styled.date}>
+					{moment(date).format('ddd, D [de] MMMM [de] YYYY')}
+				</Text>
+			</TouchableOpacity>
+		)
 	return (
 		<Modal
 			onRequestClose={props.onCancel}
@@ -47,11 +76,7 @@ const NewTask = props => {
 					onChangeText={text => setDescription(text)}
 					value={description}
 				/>
-				<DatePickerIOS
-					mode="date"
-					date={date}
-					onDateChange={date => setDate(date)}
-				/>
+				{datePicker}
 				<View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
 					<TouchableOpacity onPress={props.onCancel}>
 						<Text style={styled.button}>Cancelar</Text>
