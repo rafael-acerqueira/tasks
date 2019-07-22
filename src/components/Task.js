@@ -31,7 +31,7 @@ export default props => {
 				<Text style={styled.date}>
 					{moment(props.estimateAt)
 						.locale('pt-BR')
-						.format('ddd, D [de] MMMM')}
+						.format('ddd, D [de] MMMM [de] YYYY')}
 				</Text>
 			</View>
 		</View>
