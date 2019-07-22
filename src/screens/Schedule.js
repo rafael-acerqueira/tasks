@@ -14,6 +14,8 @@ import todayImage from '../../assets/imgs/today.jpg'
 import global from '../../src/styles/global'
 import Task from '../components/Task'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ActionButton from 'react-native-action-button'
+import NewTask from './NewTask'
 
 const Schedule = () => {
 	const [tasks, setTasks] = useState([
@@ -105,6 +107,21 @@ const Schedule = () => {
 
 	const [showDoneTasks, setShowDoneTasks] = useState(true)
 	const [visibleTasks, setVisibleTasks] = useState([])
+	const [showNewTask, setShowNewTask] = useState(false)
+
+	const addTask = ({ description, date }) => {
+		setTasks([
+			...tasks,
+			{
+				id: Math.random(),
+				description,
+				estimateAt: date,
+				doneAt: null
+			}
+		])
+
+		setShowNewTask(false)
+	}
 
 	const filterTasks = () => {
 		const visibleTasks = [...tasks]
@@ -140,6 +157,11 @@ const Schedule = () => {
 
 	return (
 		<View style={styled.container}>
+			<NewTask
+				isVisible={showNewTask}
+				onSave={addTask}
+				onCancel={() => setShowNewTask(false)}
+			/>
 			<ImageBackground source={todayImage} style={styled.background}>
 				<View style={styled.iconBar}>
 					<TouchableOpacity onPress={toggleFilter}>
@@ -166,6 +188,10 @@ const Schedule = () => {
 					renderItem={({ item }) => <Task {...item} toggleTask={toggleTask} />}
 				/>
 			</View>
+			<ActionButton
+				buttonColor={global.colors.today}
+				onPress={() => setShowNewTask(true)}
+			/>
 		</View>
 	)
 }
