@@ -123,6 +123,10 @@ const Schedule = () => {
 		setShowNewTask(false)
 	}
 
+	const deleteTask = id => {
+		setTasks(tasks.filter(task => id !== task.id))
+	}
+
 	const filterTasks = () => {
 		const visibleTasks = [...tasks]
 		setVisibleTasks(
@@ -185,7 +189,9 @@ const Schedule = () => {
 				<FlatList
 					data={visibleTasks}
 					keyExtractor={item => `${item.id}`}
-					renderItem={({ item }) => <Task {...item} toggleTask={toggleTask} />}
+					renderItem={({ item }) => (
+						<Task {...item} toggleTask={toggleTask} onDelete={deleteTask} />
+					)}
 				/>
 			</View>
 			<ActionButton
