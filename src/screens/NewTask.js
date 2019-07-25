@@ -64,6 +64,7 @@ const NewTask = props => {
 			visible={props.isVisible}
 			animationType="slide"
 			transparent={true}
+			onShow={() => setDate(new Date())}
 		>
 			<TouchableWithoutFeedback onPress={props.onCancel}>
 				<View style={styled.offset} />
