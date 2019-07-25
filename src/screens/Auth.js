@@ -71,15 +71,15 @@ const Auth = () => {
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => setStageNew(!stageNew)}
-					styled={{ padding: 10 }}
-				>
-					<Text style={styled.buttonText}>
-						{stageNew ? 'Já possui conta?' : 'Ainda não possui conta?'}
-					</Text>
-				</TouchableOpacity>
 			</View>
+			<TouchableOpacity
+				onPress={() => setStageNew(!stageNew)}
+				styled={{ padding: 10 }}
+			>
+				<Text style={styled.buttonText}>
+					{stageNew ? 'Já possui conta?' : 'Ainda não possui conta?'}
+				</Text>
+			</TouchableOpacity>
 		</ImageBackground>
 	)
 }
@@ -108,7 +108,8 @@ const styled = StyleSheet.create({
 	formContainer: {
 		backgroundColor: 'rgba(0,0,0,0.8)',
 		padding: 20,
-		width: '90%'
+		width: '90%',
+		marginBottom: 10
 	},
 	input: {
 		marginTop: 10,
