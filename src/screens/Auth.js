@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
 	Text,
 	View,
-	TextInput,
 	ImageBackground,
 	TouchableOpacity,
 	Alert,
@@ -11,6 +10,7 @@ import {
 
 import global from '../styles/global'
 import loginBackgound from '../../assets/imgs/login.jpg'
+import AuthInput from '../components/AuthInput'
 
 const Auth = () => {
 	const [stageNew, setStageNew] = useState(false)
@@ -33,20 +33,24 @@ const Auth = () => {
 					{stageNew ? 'Crie sua conta' : 'Informe seus dados'}
 				</Text>
 				{stageNew && (
-					<TextInput
+					<AuthInput
+						icon="user"
 						placeholder="Nome"
 						style={styled.input}
 						value={name}
 						onChangeText={name => setName(name)}
 					/>
 				)}
-				<TextInput
+				<AuthInput
+					icon="at"
 					placeholder="E-mail"
 					style={styled.input}
 					value={email}
 					onChangeText={email => setEmail(email)}
 				/>
-				<TextInput
+				<AuthInput
+					icon="lock"
+					secureTextEntry={true}
 					placeholder="Senha"
 					style={styled.input}
 					value={password}
@@ -54,7 +58,9 @@ const Auth = () => {
 				/>
 
 				{stageNew && (
-					<TextInput
+					<AuthInput
+						icon="asterisk"
+						secureTextEntry={true}
 						placeholder="Confirmar Senha"
 						style={styled.input}
 						value={confirmPassword}
