@@ -20,32 +20,53 @@ const Auth = props => {
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 
-	const signinOrSignup = async () => {
-		if (stageNew) {
-			try {
-				await api.post('/signup', {
-					name,
-					email,
-					password,
-					confirmPassword
-				})
-				Alert.alert('Sucesso', 'Usuário Cadastrado :)')
-				setStageNew(false)
-			} catch (error) {
-				showError(error)
-			}
-		} else {
-			try {
-				const res = await api.post('/signin', {
-					email,
-					password
-				})
-				setToken(res.data.token)
-				props.navigation.navigate('Home')
-			} catch (error) {
-				Alert.alert('Erro', 'Falha no Login')
-			}
+	const signup = async () => {
+		try {
+			await api.post('/signup', {
+				name,
+				email,
+				password,
+				confirmPassword
+			})
+			Alert.alert('Sucesso', 'Usuário Cadastrado :)')
+			setStageNew(false)
+		} catch (error) {
+			showError(error)
 		}
+	}
+
+	const signin = async () => {
+		try {
+			const res = await api.post('/signin', {
+				email,
+				password
+			})
+			setToken(res.data.token)
+			props.navigation.navigate('Home')
+		} catch (error) {
+			Alert.alert('Erro', 'Falha no Login')
+		}
+	}
+
+	const signinOrSignup = () => {
+		stageNew ? signup() : signin()
+	}
+
+	const validForm = () => {
+		const validations = []
+
+		validations.push(email && email.includes('@'))
+		validations.push(password && password.length >= 8)
+
+		if (stageNew) {
+			validations.push(name && name.trim())
+			validations.push(confirmPassword)
+			validations.push(password === confirmPassword)
+		}
+
+		return validations.reduce(
+			(acumulator, validation) => acumulator && validation
+		)
 	}
 
 	return (
@@ -93,8 +114,13 @@ const Auth = props => {
 					/>
 				)}
 
-				<TouchableOpacity onPress={signinOrSignup}>
-					<View style={styled.button}>
+				<TouchableOpacity onPress={signinOrSignup} disabled={!validForm()}>
+					<View
+						style={[
+							styled.button,
+							!validForm() ? { backgroundColor: '#AAA' } : {}
+						]}
+					>
 						<Text style={styled.buttonText}>
 							{stageNew ? 'Registrar' : 'Entrar'}
 						</Text>
