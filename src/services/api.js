@@ -6,7 +6,7 @@ const api = axios.create({
 })
 
 export const setToken = token => {
-	axios.defaults.headers.common['Authorization'] = `bearer ${token}`
+	api.defaults.headers.common['Authorization'] = `bearer ${token}`
 }
 
 export const showError = err => {
