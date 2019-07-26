@@ -6,11 +6,11 @@ import {
 	ImageBackground,
 	FlatList,
 	TouchableOpacity,
-	Platform,
-	AsyncStorage
+	Platform
 } from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import api, { showError } from '../services/api'
 import todayImage from '../../assets/imgs/today.jpg'
 import global from '../../src/styles/global'
 import Task from '../components/Task'
@@ -25,22 +25,36 @@ const Schedule = () => {
 	const [visibleTasks, setVisibleTasks] = useState([])
 	const [showNewTask, setShowNewTask] = useState(false)
 
-	const addTask = ({ description, date }) => {
-		setTasks([
-			...tasks,
-			{
-				id: Math.random(),
+	const addTask = async ({ description, date }) => {
+		try {
+			await api.post('/tasks', {
 				description,
-				estimateAt: date,
-				doneAt: null
-			}
-		])
-
-		setShowNewTask(false)
+				estimateAt: date
+			})
+			setShowNewTask(false)
+			await loadTasks()
+		} catch (error) {
+			showError(error)
+		}
 	}
 
-	const deleteTask = id => {
-		setTasks(tasks.filter(task => id !== task.id))
+	const deleteTask = async id => {
+		try {
+			await api.delete(`/tasks/${id}`)
+			await loadTasks()
+		} catch (error) {
+			showError(error)
+		}
+	}
+
+	const loadTasks = async () => {
+		try {
+			const maxDate = moment().format('YYYY-MM-DD 23:59')
+			const { data } = await api.get(`tasks?date=${maxDate}`)
+			setTasks(data)
+		} catch (error) {
+			showError(error)
+		}
 	}
 
 	const filterTasks = () => {
@@ -54,36 +68,27 @@ const Schedule = () => {
 				}
 			})
 		)
-
-		AsyncStorage.setItem('tasks', JSON.stringify(tasks))
 	}
 
 	const toggleFilter = () => {
 		setShowDoneTasks(!showDoneTasks)
 	}
 
-	useEffect(() => {
-		const getTasks = async () => {
-			const data = await AsyncStorage.getItem('tasks')
-			const tasks = JSON.parse(data) || []
-			setTasks(tasks)
-		}
-		getTasks()
+	useEffect(async () => {
+		await loadTasks()
 	}, [])
 
 	useEffect(() => {
 		filterTasks()
 	}, [showDoneTasks, tasks])
 
-	const toggleTask = id => {
-		setTasks(
-			tasks.map(task => {
-				if (task.id === id) {
-					return { ...task, doneAt: task.doneAt ? null : new Date() }
-				}
-				return task
-			})
-		)
+	const toggleTask = async id => {
+		try {
+			await api.put(`tasks/${id}/toggle-done-at`)
+			await loadTasks()
+		} catch (error) {
+			showError(error)
+		}
 	}
 
 	return (
