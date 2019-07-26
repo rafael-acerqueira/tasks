@@ -11,18 +11,41 @@ import {
 import global from '../styles/global'
 import loginBackgound from '../../assets/imgs/login.jpg'
 import AuthInput from '../components/AuthInput'
+import api, { setToken, showError } from '../services/api'
 
-const Auth = () => {
+const Auth = props => {
 	const [stageNew, setStageNew] = useState(false)
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 
-	const signinOrSignup = () => {
-		stageNew
-			? Alert.alert('bbbbb', 'Cadastrar usuário')
-			: Alert.alert('aaaaaaaa', 'Logar')
+	const signinOrSignup = async () => {
+		if (stageNew) {
+			try {
+				await api.post('/signup', {
+					name,
+					email,
+					password,
+					confirmPassword
+				})
+				Alert.alert('Sucesso', 'Usuário Cadastrado :)')
+				setStageNew(false)
+			} catch (error) {
+				showError(error)
+			}
+		} else {
+			try {
+				const res = await api.post('/signin', {
+					email,
+					password
+				})
+				setToken(res.data.token)
+				props.navigation.navigate('Home')
+			} catch (error) {
+				Alert.alert('Erro', 'Falha no Login')
+			}
+		}
 	}
 
 	return (
