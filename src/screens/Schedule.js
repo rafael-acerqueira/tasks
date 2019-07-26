@@ -12,13 +12,16 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 import api, { showError } from '../services/api'
 import todayImage from '../../assets/imgs/today.jpg'
+import tomorrowImage from '../../assets/imgs/tomorrow.jpg'
+import weekImage from '../../assets/imgs/week.jpg'
+import monthImage from '../../assets/imgs/month.jpg'
 import global from '../../src/styles/global'
 import Task from '../components/Task'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ActionButton from 'react-native-action-button'
 import NewTask from './NewTask'
 
-const Schedule = () => {
+const Schedule = props => {
 	const [tasks, setTasks] = useState([])
 
 	const [showDoneTasks, setShowDoneTasks] = useState(true)
@@ -49,7 +52,9 @@ const Schedule = () => {
 
 	const loadTasks = async () => {
 		try {
-			const maxDate = moment().format('YYYY-MM-DD 23:59')
+			const maxDate = moment()
+				.add({ days: props.daysAhead })
+				.format('YYYY-MM-DD 23:59')
 			const { data } = await api.get(`tasks?date=${maxDate}`)
 			setTasks(data)
 		} catch (error) {
@@ -91,6 +96,28 @@ const Schedule = () => {
 		}
 	}
 
+	let styleColor = null
+	let image = null
+
+	switch (props.daysAhead) {
+	case 0:
+		styleColor = global.colors.today
+		image = todayImage
+		break
+	case 1:
+		styleColor = global.colors.tomorrow
+		image = tomorrowImage
+		break
+	case 7:
+		styleColor = global.colors.week
+		image = weekImage
+		break
+	default:
+		styleColor = global.colors.month
+		image = monthImage
+		break
+	}
+
 	return (
 		<View style={styled.container}>
 			<NewTask
@@ -98,8 +125,11 @@ const Schedule = () => {
 				onSave={addTask}
 				onCancel={() => setShowNewTask(false)}
 			/>
-			<ImageBackground source={todayImage} style={styled.background}>
+			<ImageBackground source={image} style={styled.background}>
 				<View style={styled.iconBar}>
+					<TouchableOpacity onPress={() => props.navigation.openDrawer()}>
+						<Icon name="bars" size={20} color={global.colors.secondary} />
+					</TouchableOpacity>
 					<TouchableOpacity onPress={toggleFilter}>
 						<Icon
 							name={showDoneTasks ? 'eye' : 'eye-slash'}
@@ -109,7 +139,7 @@ const Schedule = () => {
 					</TouchableOpacity>
 				</View>
 				<View style={styled.titleBar}>
-					<Text style={styled.title}>Hoje</Text>
+					<Text style={styled.title}>{props.title}</Text>
 					<Text style={styled.subtitle}>
 						{moment()
 							.locale('pt-BR')
@@ -127,7 +157,7 @@ const Schedule = () => {
 				/>
 			</View>
 			<ActionButton
-				buttonColor={global.colors.today}
+				buttonColor={styleColor}
 				onPress={() => setShowNewTask(true)}
 			/>
 		</View>
@@ -166,7 +196,7 @@ const styled = StyleSheet.create({
 		marginTop: Platform.OS === 'ios' ? 30 : 10,
 		marginHorizontal: 20,
 		flexDirection: 'row',
-		justifyContent: 'flex-end'
+		justifyContent: 'space-between'
 	}
 })
 
