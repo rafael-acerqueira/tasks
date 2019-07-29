@@ -5,6 +5,7 @@ import {
 	createAppContainer
 } from 'react-navigation'
 import Schedule from '../src/screens/Schedule'
+import Menu from '../src//components/Menu'
 import Auth from '../src/screens/Auth'
 import global from './styles/global'
 
@@ -41,6 +42,7 @@ const MenuRoutes = createDrawerNavigator(
 	},
 	{
 		initialRouteName: 'Today',
+		contentComponent: Menu,
 		contentOptions: {
 			labelStyle: {
 				fontFamily: global.fontFamily,

@@ -42,7 +42,7 @@ const Auth = props => {
 				password
 			})
 			setToken(res.data.token)
-			props.navigation.navigate('Home')
+			props.navigation.navigate('Home', res.data)
 		} catch (error) {
 			Alert.alert('Erro', 'Falha no Login')
 		}
